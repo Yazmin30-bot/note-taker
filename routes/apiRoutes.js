@@ -17,4 +17,20 @@ module.exports = (app) => {
     res.json(noteData);
   })
 
+  //Create a get request to show a JSON of the specific ID data in the table
+  app.get('/api/notes/:id', (req, res) => {
+    let noteData = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    const chosen = req.params.id;
+    console.log(chosen);
+    /* Check each noteDate and see if the same as "chosen"
+     If the statement is true, send the note back as JSON,
+     otherwise tell the user no note was found */
+    for (let i = 0; i < noteData.length; i++) {
+      if (chosen === noteData[i].id) {
+        return res.json(noteData[i]);
+      }
+    }
+    return res.json(false);
+  })
+
 };
