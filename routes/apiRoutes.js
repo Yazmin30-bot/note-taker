@@ -33,4 +33,23 @@ module.exports = (app) => {
     return res.json(false);
   })
 
+  //Create a post request to save the new note on the database
+  app.post('/api/notes', (req, res) => {
+    let noteData = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    let newNote = req.body;
+    //Create an unique id for each note
+    let id = uuidv4();
+    //Add a new attribute to each object in the database
+    newNote.id = id;
+    noteData.push(newNote);
+    //Write the new note  to the database 
+    fs.writeFile("db/db.json", JSON.stringify(noteData, '\t'), err => {
+      if (err) throw err;
+      return true;
+    });
+
+    res.json(true);
+
+  });
+
 };
